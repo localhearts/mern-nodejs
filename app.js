@@ -1,10 +1,12 @@
 const express = require('express')
+const connectDatabase = require('./config/database')
 const app = express()
 
 app.use(express.json())
 
 require('dotenv').config()
 
+connectDatabase();
 const product = require('./routes/products')
 
 app.use('/api/v1/',product);
