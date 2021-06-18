@@ -11,9 +11,13 @@ exports.createProduct = async (req,res,next) => {
 
 }
 
-exports.getProduct =  (req,res,next) => {
+exports.getProduct = async (req,res,next) => {
+
+    const product = await Product.find();
     res.status(200).json({
         success:true,
-        message:'This Route will show all products in database'
+        count: product.length,
+        product
+        
     })
 }
