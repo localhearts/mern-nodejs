@@ -1,0 +1,28 @@
+[
+    {
+        "name":"Valencia Orange - Imported",
+        "price": "50.000",
+        "description": "High quality Fresh Orange fruit exporters from South Korea for sale. All citrus trees belong to the single genus Citrus and remain almost entirely interfertile. This includes grapefruits, lemons, limes, oranges, and various other types and hybrids. The fruit of any citrus tree is considered a hesperidium, a kind of modified berry; it is covered by a rind originated by a rugged thickening of the ovary wall",
+        "ratings": 5.0,
+        "images":[
+            {
+            "public_id": "img/recommend/r1",
+            "url": "https://askbootstrap.com/preview/grofar/img/recommend/r1.jpg"
+            },
+            {
+                "public_id": "img/recommend/r2",
+                "url": "https://askbootstrap.com/preview/grofar/img/recommend/r2.jpg"
+            },
+            {
+                "public_id": "img/recommend/r3",
+                "url": "https://askbootstrap.com/preview/grofar/img/recommend/r3.jpg"
+            }
+        ],
+        "category": "Fruits",
+        "seller": "Happy Fresh",
+        "stock": 100,
+        "numOfReviews": 230,
+        "reviews": []
+
+    }
+]
