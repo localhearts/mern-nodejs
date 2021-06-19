@@ -145,6 +145,89 @@ exports.changePassword = catchAsyncErrors( async (req, res, next) => {
 
 })
 
+exports.updateUserProfile = catchAsyncErrors (async (req, res, next) => {
+
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email
+    }
+    
+
+    const user  = await User.findByIdAndUpdate(req.user.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success: true
+    })
+
+})
+
+exports.getAllUser = catchAsyncErrors (async (req, res, next) => {
+    
+    const user  = await User.find();
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+
+})
+
+exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
+     
+    const user = await User.findById(req.params.id)
+
+    if(!user){
+        return next(new ErrorHandler(`user does not exist with id: ${req.params.id}`))
+    }
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+
+})
+
+exports.updateUser = catchAsyncErrors (async (req, res, next) => {
+
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email,
+        roles: req.body.roles
+    }
+    
+
+    const user  = await User.findByIdAndUpdate(req.params.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success: true
+    })
+
+})
+
+exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
+     
+    const user = await User.findById(req.params.id)
+
+    if(!user){
+        return next(new ErrorHandler(`user does not exist with id: ${req.params.id}`))
+    }
+
+    await user.remove();
+
+    res.status(200).json({
+        success: true,
+    })
+
+})
+
 exports.logoutUser = catchAsyncErrors( async (req, res, next) => {
 
     res.cookie('token',null, {
