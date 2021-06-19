@@ -8,9 +8,13 @@ app.use(express.json())
 require('dotenv').config()
 
 connectDatabase();
+
 const product = require('./routes/products')
+const auth = require('./routes/auth')
 
 app.use('/api/v1/',product);
+app.use('/api/v1/',auth);
+
 app.listen(process.env.PORT,()=>{
     console.log(`Server start on PORT: ${process.env.PORT}`)
 })
