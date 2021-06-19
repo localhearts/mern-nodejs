@@ -4,7 +4,7 @@ const ErrorHandler = require('../utils/errorHandler')
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
-const crypto = require('crypto')
+const crypto = require('crypto');
 
 exports.registerUsers = catchAsyncErrors(async (req,res,next) => {
     
@@ -113,7 +113,34 @@ exports.resetPassword = catchAsyncErrors( async (req, res, next) => {
     await user.save();
 
     sendToken(user, 200, res)
+})
+
+exports.getUserProfile = catchAsyncErrors ( async (req, res, next) => {
     
+    const user = await User.findById(req.user.id)
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
+
+exports.changePassword = catchAsyncErrors( async (req, res, next) => {
+
+    const user = await User.findById(req.user.id).select('+password')
+
+    //check
+    const isMatched = await user.comparePassword(req.body.oldPassword)
+
+    if(!isMatched){
+        return next(new ErrorHandler('Old Password is incorrect'))
+    }
+
+    user.password = req.body.password;
+
+    await user.save();
+
+    sendToken(user, 200,res)
 
 
 })
