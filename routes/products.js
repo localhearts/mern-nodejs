@@ -9,10 +9,12 @@ const {
     deleteProduct 
 } = require('../controller/productController')
 
+const { isAuthenticatedUser } = require('../middlewares/auth')
+
 router.route('/admin/products/create').post(createProduct);
 router.route('/admin/products/:id').put(updateProduct).delete(deleteProduct);
 
-router.route('/products').get(getProduct);
+router.route('/products').get(isAuthenticatedUser,getProduct);
 router.route('/products/:id').get(getSingleProduct);
 
 
