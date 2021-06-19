@@ -21,7 +21,7 @@ module.exports = (err, req, res, next) => {
             const message = `Resource not found. Invalid ${err.path}`
             error = new ErrorHandler(message,400)
         }
-        console.log(Object)
+        
         // Handling Mongoose Validation Error
         if(err.name === "ValidationError"){
             const message = Object.values(err.errors).map(values => values.message);

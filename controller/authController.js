@@ -3,6 +3,8 @@ const User = require('../models/users')
 const ErrorHandler = require('../utils/errorHandler')
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const sendToken = require('../utils/jwtToken');
+const sendEmail = require('../utils/sendEmail');
+const crypto = require('crypto')
 
 exports.registerUsers = catchAsyncErrors(async (req,res,next) => {
     
@@ -45,7 +47,78 @@ exports.loginUsers = catchAsyncErrors(async (req,res,next) => {
 
 })
 
-exports.logoutUser = catchAsyncErrors( async(req, res, next) => {
+exports.forgotPassword = catchAsyncErrors( async(req, res, next) => {
+
+    const user = await User.findOne({ email: req.body.email })
+
+    if(!user){
+        return next(new ErrorHandler('User not found with this email', 401));
+    }
+
+    const resetToken = user.getResetPassword();
+
+    await user.save({ validateBeforeSave: false })
+
+    const resetUrl  = `${req.protocol}://${req.get('host')}/api/v1/password/reset/${resetToken}`;
+
+    const message = ` Your password reset token is as follow: \n\n ${resetUrl} \n\n If you have not requested this email, then ignore it.`;
+
+    try {
+
+        await sendEmail({
+            email: user.email,
+            subject: 'Nekyland Brands Recovery Password',
+            message
+        })
+
+        res.status(200).json({
+            success: true,
+            message: `Email sent to: ${user.email}`
+        })
+
+    }catch (error) {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpired = undefined;
+
+        await user.save({ validateBeforeSave: false});
+
+        return next(new ErrorHandler(error.message, 500))
+
+
+    }
+
+})
+
+exports.resetPassword = catchAsyncErrors( async (req, res, next) => {
+
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpired: { $gt: Date.now() }
+    })
+
+    if(!user) {
+        return next(new ErrorHandler('Password reset token is invalid or has been expired', 400))
+    }
+
+    if(req.body.password !== req.body.confirmPassword) {
+        return next(new ErrorHandler('Password does not match',400))
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpired = undefined;
+
+    await user.save();
+
+    sendToken(user, 200, res)
+    
+
+
+})
+
+exports.logoutUser = catchAsyncErrors( async (req, res, next) => {
 
     res.cookie('token',null, {
         expires: new Date(Date.now()),
