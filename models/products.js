@@ -80,6 +80,11 @@ const productSchema = new mongoose.Schema({
               }
           }
       ],
+      created_by: {
+          type: String,
+          ref:'User',
+          required: true
+      },
       created_at: {
           type: Date,
           default: Date.now
