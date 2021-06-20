@@ -1,0 +1,29 @@
+[
+    {
+        "itemsPrice" : 50000,
+        "taxPrice" : 1000,
+        "shippingPrice" : 9000,
+        "totalPrice" : 60000,
+        "orderItems" : [
+            {
+                "product" : "60cce698664cb503ce08e12e",
+                "name" : "Valencia Orange - Imported",
+                "price" : 50000,
+                "image" : "https://askbootstrap.com/preview/grofar/img/recommend/r1.jpg",
+                "quantity" : 1
+            }
+        ],
+        "shippingInfo" : {
+            "address" : "3951  Smith Street",
+            "city" : "New York",
+            "state": "NY",
+            "phoneNumber" : 5555551234,
+            "postalCode" : 10001,
+            "country" : "United States"
+        },
+        "paymentInfo" : {
+            "id" : "pi_1HrMVNAlHMiRMt8E1BguvVIo",
+            "status": "succeeded"
+        }
+    }
+]
